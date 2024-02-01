@@ -101,17 +101,8 @@ const placeMarker = async (location, type) => {
 
   try {
     let lat, lon;
-
-    // Check if the location is a string (clicked location) or an object (suggestion)
-    if (typeof location === 'string') {
-    const [latStr, lonStr] = location.split(',').map(coord => coord.trim());
-    lat = parseFloat(latStr);
-    lon = parseFloat(lonStr);
-  } else {
-    // Use the suggestion's lat and lon directly
     lat = location.lat;
     lon = location.lon;
-}
 
     // Clear existing markers
     map.value.eachLayer((layer) => {
@@ -122,19 +113,11 @@ const placeMarker = async (location, type) => {
 
     // Add a marker for the location with the corresponding icon
     const marker = L.marker([lat, lon], { type, icon: type === 'departure' ? departureIcon : destinationIcon }).addTo(map.value)
-      .bindPopup(`${type.charAt(0).toUpperCase() + type.slice(1)} at (${lat.toFixed(4)}, ${lon.toFixed(4)})`)
+      .bindPopup(`${type.charAt(0).toUpperCase() + type.slice(1)} at (${lat}, ${lon})`)
       .openPopup();
 
-    // Get the bounds of the marker
-    const markerBounds = marker.getBounds();
+   map.value.setView([lat,lon], 15)
 
-    // Zoom the map to the marker's bounds
-    map.value.fitBounds(markerBounds, { padding: [50, 50] });
-
-    // If the type is 'departure', zoom further to the departure location
-    if (type === 'departure') {
-      map.value.setView([lat, lon], 15);
-    }
   } catch (error) {
     // Show an error popup for fetch errors
     L.popup()
@@ -176,23 +159,24 @@ onMounted(() => {
   map.value = L.map('map').setView([36.731538, 3.087544], 10);
 
   L.tileLayer(`https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png?access_token=${apiKey}`, {
-    attribution: '&copy; OpenStreetMap contributors'
+    attribution: '&copy;'
   }).addTo(map.value);
 
-  map.value.on('click', onMapClick);
+  //map.value.on('click', onMapClick);
 });
-const onMapClick = (e) => {
-  // Clear existing markers
-  map.value.eachLayer((layer) => {
-    if (layer instanceof L.Marker) {
-      map.value.removeLayer(layer);
-    }
-  });
 
-  // Add a marker for the clicked location
-  const { lat, lng } = e.latlng;
-  placeMarker(`${lat}, ${lng}`, 'clicked');
-};
+// const onMapClick = (e) => {
+//   // Clear existing markers
+//   map.value.eachLayer((layer) => {
+//     if (layer instanceof L.Marker) {
+//       map.value.removeLayer(layer);
+//     }
+//   });
+
+//   // Add a marker for the clicked location
+//   const { lat, lng } = e.latlng;
+//   placeMarker(`${lat}, ${lng}`, 'clicked');
+// };
 </script>
 
 <style>
