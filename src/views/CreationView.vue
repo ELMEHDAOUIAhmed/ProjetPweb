@@ -128,7 +128,7 @@ const placeMarker = async (location, type) => {
       .bindPopup(`${type.charAt(0).toUpperCase() + type.slice(1)} at (${lat}, ${lon})`)
       .openPopup();
 
-   map.value.setView([lat,lon], 15)
+   map.value.setView([lat,lon], 15);
 
   } catch (error) {
     // Show an error popup for fetch errors
@@ -156,6 +156,9 @@ const resetLocation = () => {
     destinationLocation.value = '';
     departureDate.value = '';
     departureTime.value = '';
+
+    map.value.setView([36.731538, 3.087544], 10);
+    
 
     // Clear existing markers
     map.value.eachLayer((layer) => {
