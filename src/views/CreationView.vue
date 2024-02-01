@@ -20,7 +20,18 @@
       </div>
       <input v-model="departureDate" type="date" placeholder="Departure Date" class="absolute right-0 z-10 p-2 bg-white border rounded shadow input-field top-28">
       <input v-model="departureTime" type="time" placeholder="Departure Time" class="absolute right-0 z-10 p-2 bg-white border rounded shadow input-field top-40">
-      <input v-model="availablePlace" type="text" pattern="[0-9]+" placeholder="Available Places" class="absolute right-0 z-10 p-2 bg-white border rounded shadow input-field top-40">
+      <div class="input-container flex">
+    <input
+      v-model="availablePlace"
+      type="text"
+      pattern="[1-9]\d*"
+      placeholder="Available Places"
+      class="p-2 bg-white border rounded shadow input-field"
+      @input="validateInput"
+    />
+    <p v-if="error" class="text-red-500">{{ error }}</p>
+  </div>
+
 
 
       <!-- Buttons -->
@@ -163,21 +174,28 @@ onMounted(() => {
     attribution: '&copy;'
   }).addTo(map.value);
 
-  //map.value.on('click', onMapClick);
 });
 
-// const onMapClick = (e) => {
-//   // Clear existing markers
-//   map.value.eachLayer((layer) => {
-//     if (layer instanceof L.Marker) {
-//       map.value.removeLayer(layer);
-//     }
-//   });
 
-//   // Add a marker for the clicked location
-//   const { lat, lng } = e.latlng;
-//   placeMarker(`${lat}, ${lng}`, 'clicked');
-// };
+
+
+</script>
+
+<script>
+export default {
+  data() {
+    return {
+      availablePlace: '',
+      error: '',
+    };
+  },
+  methods: {
+    validateInput() {
+      const isValid = /^[1-9]\d*$/.test(this.availablePlace);
+      this.error = isValid ? '' : 'Please enter a positive integer.';
+    },
+  },
+};
 </script>
 
 <style>
@@ -231,4 +249,9 @@ onMounted(() => {
   border-radius: 0.375rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
+
+.text-red-500 {
+  margin-top: 0.5rem;
+}
 </style>
+
