@@ -20,6 +20,8 @@
       </div>
       <input v-model="departureDate" type="date" placeholder="Departure Date" class="absolute right-0 z-10 p-2 bg-white border rounded shadow input-field top-28">
       <input v-model="departureTime" type="time" placeholder="Departure Time" class="absolute right-0 z-10 p-2 bg-white border rounded shadow input-field top-40">
+      <input v-model="availablePlace" type="text" pattern="[0-9]+" placeholder="Available Places" class="absolute right-0 z-10 p-2 bg-white border rounded shadow input-field top-40">
+
 
       <!-- Buttons -->
       <div class="absolute right-0 z-10 flex justify-center top-52">
@@ -78,8 +80,7 @@ const selectSuggestion = (suggestion, type) => {
   }
   
   placeMarker(location, type);
-  
-  /*placeMarker({ lat: suggestion.lat, lon: suggestion.lon }, type);*/
+
 };  
 
 const departureIcon = L.icon({
